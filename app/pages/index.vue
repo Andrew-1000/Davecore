@@ -3,7 +3,11 @@ import { SITE, SERVICES, PROCESS } from '~/data/site'
 import { PLANS } from '~/data/plans'
 
 useSeoMeta({ title: `${SITE.name}: design, cost and build`, description: SITE.intro })
-const featured = PLANS.slice(0, 3)
+const { data: plans } = usePlans()
+const { data: settings } = useSiteSettings()
+const featured = computed(() => plans.value.slice(0, 3))
+// Hero drawing: the first live plan with a drawn layout, else the built-in Amani
+const hero = computed(() => plans.value.find(p => p.floors.length) ?? PLANS[1]!)
 const { data: features } = useBqFeatures()
 </script>
 
@@ -21,7 +25,7 @@ const { data: features } = useBqFeatures()
             Homes designed, costed and built properly.
           </h1>
           <p class="mt-6 text-lg text-muted max-w-xl">
-            {{ SITE.intro }} Start with a free estimate, pick a ready-made plan, or talk to our team about a custom design.
+            {{ settings.intro }} Start with a free estimate, pick a ready-made plan, or talk to our team about a custom design.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <UButton size="xl" to="/tools" icon="i-lucide-calculator" label="Estimate my build" />
@@ -32,31 +36,31 @@ const { data: features } = useBqFeatures()
         <div class="rounded-sm border-2 border-accented p-1.5 bg-default shadow-lg max-w-lg lg:ms-auto w-full">
           <div class="border border-default">
             <div class="flex justify-between border-b border-default px-4 py-2 text-[10px] uppercase tracking-widest text-muted">
-              <span>Plan {{ PLANS[1]!.code }} · {{ PLANS[1]!.name }}</span><span>Ground floor</span>
+              <span>Plan {{ hero.code }} · {{ hero.name }}</span><span>Ground floor</span>
             </div>
             <div class="p-3">
-              <FloorPlan :floor="PLANS[1]!.floors[0]!" />
+              <FloorPlan :floor="hero.floors[0]!" />
             </div>
             <div class="grid grid-cols-3 border-t border-default text-xs">
               <div class="px-3 py-2 border-e border-default">
                 <p class="text-[9px] uppercase tracking-widest text-dimmed">
                   Bedrooms
                 </p><p class="font-mono">
-                  {{ PLANS[1]!.bedrooms }}
+                  {{ hero.bedrooms }}
                 </p>
               </div>
               <div class="px-3 py-2 border-e border-default">
                 <p class="text-[9px] uppercase tracking-widest text-dimmed">
                   Area
                 </p><p class="font-mono">
-                  {{ PLANS[1]!.floorAreas[0] }} m²
+                  {{ hero.floorAreas.reduce((s, a) => s + a, 0) }} m²
                 </p>
               </div>
               <div class="px-3 py-2">
                 <p class="text-[9px] uppercase tracking-widest text-dimmed">
                   Plot
                 </p><p class="font-mono">
-                  {{ PLANS[1]!.minPlot }}
+                  {{ hero.minPlot }}
                 </p>
               </div>
             </div>

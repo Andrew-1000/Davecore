@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { SITE } from '~/data/site'
 
-/** Contact / consultation / plan enquiry, saved in the BQ system (Admin → Website enquiries). */
+/**
+ * Contact / consultation / plan enquiry. Saved in Supabase (website admin → Enquiries); until the
+ * site is connected to Supabase, it goes to the BQ system (BQ admin → Website enquiries).
+ */
 const props = withDefaults(defineProps<{ kind?: 'consultation' | 'plan' | 'contact' | 'quote', planRef?: string, subject?: string, chooseKind?: boolean }>(), { kind: 'consultation', planRef: '', subject: '', chooseKind: false })
 const emit = defineEmits<{ sent: [] }>()
 
@@ -22,9 +25,15 @@ async function submit() {
     error.value = 'Please give a phone number or an email so we can reach you.'
     return
   }
+  if (form.website) { sent.value = true; return } // honeypot: silently drop bots
   sending.value = true
   try {
-    await $fetch(`${useBqBase()}/api/site/enquiries`, {
+    const sb = useSupabase()
+    if (sb) {
+      const { error: e } = await sb.from('enquiries').insert({ kind: form.kind, name: form.name.trim(), phone: form.phone.trim(), email: form.email.trim(), subject: form.subject.trim(), message: form.message.trim(), plan_ref: props.planRef })
+      if (e) throw new Error(supabaseError(e))
+    }
+    else await $fetch(`${useBqBase()}/api/site/enquiries`, {
       method: 'POST',
       body: { site: SITE.key, kind: form.kind, name: form.name, phone: form.phone, email: form.email, subject: form.subject, message: form.message, planRef: props.planRef, website: form.website }
     })

@@ -2,6 +2,7 @@
 import { SITE, PROCESS } from '~/data/site'
 
 useSeoMeta({ title: `About | ${SITE.name}` })
+const { data: settings } = useSiteSettings()
 const values = [
   { icon: 'i-lucide-ruler', title: 'Measured, not guessed', text: 'Every project is priced from a measured Bill of Quantities, so the number you approve is the number you build to.' },
   { icon: 'i-lucide-eye', title: 'Open books', text: 'You see the rates, the quantities and the progress. Changes are priced and agreed before they happen.' },
@@ -21,7 +22,7 @@ const values = [
           {{ SITE.name }}
         </h1>
         <p class="text-lg text-muted mt-4">
-          {{ SITE.intro }} We work with homeowners, landlords and developers across Kenya, from a first conversation about budget to handing over the keys.
+          {{ settings.intro }} We work with homeowners, landlords and developers across Kenya, from a first conversation about budget to handing over the keys.
         </p>
       </UContainer>
     </section>

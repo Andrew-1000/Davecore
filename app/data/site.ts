@@ -9,7 +9,7 @@ export const SITE = {
   intro: 'We design homes, cost them properly and build them, with a Bill of Quantities behind every shilling.',
   contact: {
     /** e.g. '+254 7XX XXX XXX' (shown as text; also used for the call link) */
-    phone: '',
+    phone: '0751 207 221',
     /** WhatsApp number in international format without +, e.g. '2547XXXXXXXX' */
     whatsapp: '',
     email: '',

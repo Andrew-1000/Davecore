@@ -2,7 +2,8 @@
 import { SITE } from '~/data/site'
 
 useSeoMeta({ title: `Contact | ${SITE.name}` })
-const c = SITE.contact
+const { data: settings } = useSiteSettings()
+const c = computed(() => settings.value.contact)
 </script>
 
 <template>

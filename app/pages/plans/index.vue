@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { SITE } from '~/data/site'
-import { PLANS, PLAN_TYPES } from '~/data/plans'
+import { PLAN_TYPES } from '~/data/plans'
 
 useSeoMeta({ title: `House plans | ${SITE.name}` })
 
 const type = ref<'all' | keyof typeof PLAN_TYPES>('all')
 const beds = ref<number>(0)
-const shown = computed(() => PLANS.filter(p => (type.value === 'all' || p.type === type.value) && (!beds.value || p.bedrooms >= beds.value)))
+const { data: plans } = usePlans()
+const shown = computed(() => plans.value.filter(p => (type.value === 'all' || p.type === type.value) && (!beds.value || p.bedrooms >= beds.value)))
 </script>
 
 <template>

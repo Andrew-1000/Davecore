@@ -1,7 +1,7 @@
 /**
- * Ready-made house plans for sale (sample catalogue; edit freely). Room layouts are in metres and
- * drive the watermarked floor-plan previews. Prices are for the drawing set in KES.
- * When plan sales move to the API (M-Pesa checkout), this file becomes the seed data.
+ * Built-in house plan catalogue. Used until the website is connected to Supabase; after that,
+ * plans are managed in the website admin (this list is the seed data in supabase/seed.sql).
+ * Room layouts are in metres and drive the drawn, watermarked previews. Prices: drawing set, KES.
  */
 export interface Room { name: string, x: number, y: number, w: number, h: number, kind?: 'wet' | 'circulation' | 'outdoor' }
 export interface Floor { name: string, width: number, depth: number, rooms: Room[] }
@@ -12,7 +12,10 @@ export interface Plan {
   type: 'bungalow' | 'maisonette' | 'apartment'
   bedrooms: number
   bathrooms: number
+  /** Room layouts for the drawn preview (may be empty when preview images are uploaded instead) */
   floors: Floor[]
+  /** Preview image URLs (watermarked), uploaded in the website admin */
+  images?: string[]
   /** Gross floor area per floor, m² (used for the cost estimate). */
   floorAreas: number[]
   minPlot: string

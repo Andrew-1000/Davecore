@@ -1,5 +1,6 @@
-// Static company website, deployed to GitHub Pages. Everything dynamic (sign-in, enquiries,
-// calculators, feature switches) comes from the Davecore BQ system API at runtime.
+// Static company website, deployed to GitHub Pages.
+// - Website sign-in, plans, testimonials, contact details and enquiries: Supabase (supabase/schema.sql)
+// - Embedded cost calculators and their on/off switches: the Davecore BQ system
 export default defineNuxtConfig({
   compatibilityDate: '2026-10-01',
   devtools: { enabled: false },
@@ -21,8 +22,12 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      /** Davecore BQ system base URL (API, sign-in, embedded calculators). */
+      /** Davecore BQ system base URL (embedded calculators). */
       bqApiBase: 'http://localhost:3000',
+      /** Supabase project URL and publishable (anon) key. Safe to expose: access is enforced by
+       *  row-level security in supabase/schema.sql. Empty = use the built-in content in app/data. */
+      supabaseUrl: '',
+      supabaseKey: '',
       siteKey: 'davecore'
     }
   },

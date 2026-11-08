@@ -1,21 +1,47 @@
 <script setup lang="ts">
 import { SITE } from '~/data/site'
-import { PLAN_INCLUDES, PLAN_TYPES, planBySlug } from '~/data/plans'
+import { PLAN_INCLUDES, PLAN_TYPES } from '~/data/plans'
 
 const route = useRoute()
-const plan = planBySlug(String(route.params.slug))
-if (!plan) throw createError({ statusCode: 404, statusMessage: 'Plan not found', fatal: true })
-useSeoMeta({ title: `${plan.name} ${PLAN_TYPES[plan.type].toLowerCase()} plan (${plan.code}) | ${SITE.name}`, description: plan.summary })
+const { data: plan, status } = await usePlan(String(route.params.slug))
+useSeoMeta({
+  title: () => plan.value ? `${plan.value.name} ${PLAN_TYPES[plan.value.type].toLowerCase()} plan (${plan.value.code}) | ${SITE.name}` : `House plan | ${SITE.name}`,
+  description: () => plan.value?.summary ?? ''
+})
 
-const floorTab = ref(0)
-const totalArea = plan.floorAreas.reduce((s, a) => s + a, 0)
+// Gallery: drawn floors first, then uploaded preview images
+const views = computed(() => plan.value
+  ? [...plan.value.floors.map(f => ({ kind: 'floor' as const, label: f.name, floor: f })), ...(plan.value.images ?? []).map((src, i) => ({ kind: 'image' as const, label: `Image ${i + 1}`, src }))]
+  : [])
+const viewTab = ref(0)
+watch(views, (v) => { if (viewTab.value >= v.length) viewTab.value = 0 })
+const current = computed(() => views.value[viewTab.value])
+const totalArea = computed(() => (plan.value?.floorAreas ?? []).reduce((s, a) => s + a, 0))
 const enquireOpen = ref(false)
 // Prefill the cost calculator with this plan's building type and floor areas
-const estimateLink = { path: '/tools', query: { type: plan.type, areas: plan.floorAreas.join(',') } }
+const estimateLink = computed(() => ({ path: '/tools', query: { type: plan.value?.type, areas: plan.value?.floorAreas.join(',') } }))
 </script>
 
 <template>
-  <UContainer v-if="plan" class="py-10">
+  <UContainer v-if="!plan" class="py-24 text-center">
+    <template v-if="status === 'pending' || status === 'idle'">
+      <UIcon name="i-lucide-loader-circle" class="size-6 animate-spin text-muted" />
+    </template>
+    <template v-else>
+      <UIcon name="i-lucide-search-x" class="size-10 text-dimmed" />
+      <h1 class="font-display text-3xl font-semibold mt-4">
+        This plan is no longer available
+      </h1>
+      <p class="text-muted mt-2">
+        It may have been renamed or withdrawn. Browse the current plans, or ask us for something similar.
+      </p>
+      <div class="mt-6 flex justify-center gap-2">
+        <UButton to="/plans" label="See all plans" />
+        <UButton to="/contact" color="neutral" variant="outline" label="Contact us" />
+      </div>
+    </template>
+  </UContainer>
+  <UContainer v-else class="py-10">
     <UButton to="/plans" color="neutral" variant="link" icon="i-lucide-arrow-left" label="All plans" class="-ms-2.5" />
     <div class="mt-4 grid lg:grid-cols-[minmax(0,1fr)_22rem] gap-8 items-start">
       <div>
@@ -32,14 +58,18 @@ const estimateLink = { path: '/tools', query: { type: plan.type, areas: plan.flo
         <div class="mt-6 rounded-sm border-2 border-accented p-1.5">
           <div class="border border-default">
             <div class="flex items-center justify-between border-b border-default px-3 py-2">
-              <div v-if="plan.floors.length > 1" class="flex gap-1">
-                <UButton v-for="(f, i) in plan.floors" :key="f.name" size="xs" :variant="floorTab === i ? 'solid' : 'ghost'" :color="floorTab === i ? 'primary' : 'neutral'" :label="f.name" @click="floorTab = i" />
+              <div v-if="views.length > 1" class="flex flex-wrap gap-1">
+                <UButton v-for="(v, i) in views" :key="i" size="xs" :variant="viewTab === i ? 'solid' : 'ghost'" :color="viewTab === i ? 'primary' : 'neutral'" :label="v.label" @click="viewTab = i" />
               </div>
-              <span v-else class="text-[10px] uppercase tracking-widest text-muted">{{ plan.floors[0]!.name }}</span>
+              <span v-else class="text-[10px] uppercase tracking-widest text-muted">{{ current?.label ?? 'Preview' }}</span>
               <span class="text-[10px] uppercase tracking-widest text-muted">Watermarked preview</span>
             </div>
-            <div class="p-3 sm:p-6 bg-elevated/30">
-              <FloorPlan :floor="plan.floors[floorTab]!" />
+            <div class="bg-elevated/30" :class="current?.kind === 'image' ? '' : 'p-3 sm:p-6'">
+              <FloorPlan v-if="current?.kind === 'floor'" :floor="current.floor" />
+              <PlanImage v-else-if="current?.kind === 'image'" :src="current.src" :alt="`${plan.name}: ${current.label}`" contain class="aspect-[4/3]" />
+              <div v-else class="aspect-[4/3] grid place-items-center text-dimmed text-sm">
+                Preview coming soon
+              </div>
             </div>
           </div>
         </div>
