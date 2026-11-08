@@ -34,6 +34,21 @@ In the BQ system, go to **Admin → Website integration** and add the website's 
 4. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds with `nuxt build --preset github_pages` and publishes the result.
 5. Add the Pages origin to the BQ system's allowed website origins (see above).
 
+### Test the GitHub Pages build locally
+
+Pages serves the site from `/<repo-name>/`, so build with that base path:
+
+```bash
+# Git Bash: MSYS_NO_PATHCONV=1 stops Git Bash rewriting /davecore-website/ into a Windows path
+MSYS_NO_PATHCONV=1 NUXT_APP_BASE_URL=/davecore-website/ npx nuxt build --preset github_pages
+```
+
+```powershell
+$env:NUXT_APP_BASE_URL = '/davecore-website/'; npx nuxt build --preset github_pages
+```
+
+The static site is written to `.output/public`. Serve it under `/davecore-website/` to try it.
+
 ## Editing content
 
 - Company details, services and process: `app/data/site.ts`. Empty phone, email and WhatsApp fields are hidden.
