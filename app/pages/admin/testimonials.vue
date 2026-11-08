@@ -107,7 +107,7 @@ const fmtDate = (s: string) => new Date(s).toLocaleDateString('en-KE', { day: 'n
       <UButton class="ms-auto" icon="i-lucide-plus" label="Add a testimonial" @click="edit()" />
     </div>
     <p class="mt-3 text-sm text-muted">
-      Clients send testimonials from the <NuxtLink to="/share-your-experience" target="_blank" class="text-primary underline">Share your experience</NuxtLink> page. Check each one with the client before approving it.
+      Clients send testimonials from the <a :href="siteUrl('/share-your-experience')" target="_blank" rel="noopener" class="text-primary underline">Share your experience</a> page. Check each one with the client before approving it.
     </p>
 
     <UAlert v-if="loadError" class="mt-4" color="error" variant="subtle" :title="loadError" />

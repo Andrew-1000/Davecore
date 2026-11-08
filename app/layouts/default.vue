@@ -75,7 +75,15 @@ const year = new Date().getFullYear()
       </UContainer>
       <div class="border-t border-white/10">
         <UContainer class="py-4 text-xs text-slate-500 flex flex-wrap justify-between gap-2">
-          <span>© {{ year }} {{ SITE.name }} · <NuxtLink to="/share-your-experience" class="hover:text-white">Share your experience</NuxtLink> · <NuxtLink to="/login" class="hover:text-white">Staff sign in</NuxtLink></span>
+          <span class="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span>© {{ year }} {{ SITE.name }}</span>
+            <NuxtLink to="/share-your-experience" class="inline-flex items-center gap-1.5 text-slate-300 hover:text-white">
+              <UIcon name="i-lucide-message-square-quote" class="size-3.5" /> Share your experience
+            </NuxtLink>
+            <NuxtLink to="/login" class="inline-flex items-center gap-1.5 rounded-md border border-white/20 px-2.5 py-1 text-slate-200 hover:text-white hover:border-white/40 hover:bg-white/5">
+              <UIcon name="i-lucide-lock-keyhole" class="size-3.5" /> Staff sign in
+            </NuxtLink>
+          </span>
           <span>Estimates on this site are indicative. A measured Bill of Quantities gives a tender-ready price.</span>
         </UContainer>
       </div>

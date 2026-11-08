@@ -53,7 +53,8 @@ useHead({ meta: [{ name: 'robots', content: 'noindex' }] })
             <UNavigationMenu :collapsed="collapsed" :items="nav" orientation="vertical" tooltip />
             <UNavigationMenu
               :collapsed="collapsed"
-              :items="[{ label: 'View website', icon: 'i-lucide-external-link', to: '/', target: '_blank' }]"
+              :items="[{ label: 'View website', icon: 'i-lucide-external-link', to: siteUrl('/'), target: '_blank' }]"
+              :external-icon="false"
               orientation="vertical"
               tooltip
               class="mt-auto"
