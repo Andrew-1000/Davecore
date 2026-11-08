@@ -9,8 +9,11 @@ let client: SupabaseClient | null | undefined
 export function useSupabase(): SupabaseClient | null {
   if (client !== undefined) return client
   const { supabaseUrl, supabaseKey } = useRuntimeConfig().public
-  client = supabaseUrl && supabaseKey
-    ? createClient(String(supabaseUrl), String(supabaseKey), {
+  // Accept the URL as copied from Supabase's Data API page too (…supabase.co/rest/v1/)
+  const url = String(supabaseUrl || '').trim().replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '')
+  const key = String(supabaseKey || '').trim()
+  client = url && key
+    ? createClient(url, key, {
         auth: {
           // Sessions only exist in the browser; the build (prerender) reads public content only
           persistSession: import.meta.client,
