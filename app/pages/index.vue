@@ -135,6 +135,9 @@ const { data: features } = useBqFeatures()
       </ol>
     </UContainer>
 
+    <!-- Testimonials (hidden on the live site until real ones are added in data/testimonials.ts) -->
+    <TestimonialsSection />
+
     <!-- Cost tools -->
     <section class="bg-primary text-white">
       <UContainer class="py-14 grid md:grid-cols-[1fr_auto] gap-6 items-center">
