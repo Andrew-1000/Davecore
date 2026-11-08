@@ -148,8 +148,8 @@ const { data: features } = useBqFeatures()
           </p>
         </div>
         <div class="flex flex-wrap gap-3">
-          <UButton size="lg" color="neutral" to="/tools" icon="i-lucide-calculator" label="Open cost tools" />
-          <UButton size="lg" color="neutral" variant="outline" class="text-white ring-white/40 hover:bg-white/10" to="/contact" label="Talk to us" />
+          <UButton size="lg" color="neutral" class="bg-white text-blue-700 hover:bg-blue-50 active:bg-blue-100" to="/tools" icon="i-lucide-calculator" label="Open cost tools" />
+          <UButton size="lg" color="neutral" variant="outline" class="bg-transparent text-white ring-white/60 hover:bg-white/10 active:bg-white/20" to="/contact" label="Talk to us" />
         </div>
       </UContainer>
     </section>
