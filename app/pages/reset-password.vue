@@ -52,10 +52,10 @@ async function submit() {
           </div>
           <form v-else class="mt-6 space-y-4" @submit.prevent="submit">
             <UFormField label="New password" required>
-              <UInput v-model="password" type="password" autocomplete="new-password" required class="w-full" size="lg" />
+              <PasswordInput v-model="password" autocomplete="new-password" required class="w-full" size="lg" />
             </UFormField>
             <UFormField label="Repeat the new password" required>
-              <UInput v-model="confirm" type="password" autocomplete="new-password" required class="w-full" size="lg" />
+              <PasswordInput v-model="confirm" autocomplete="new-password" required class="w-full" size="lg" />
             </UFormField>
             <p v-if="error" class="text-sm text-error">
               {{ error }}

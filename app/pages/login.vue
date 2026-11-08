@@ -61,7 +61,7 @@ async function submit() {
             <UInput v-model="form.email" type="email" autocomplete="email" required class="w-full" size="lg" />
           </UFormField>
           <UFormField v-if="mode === 'signin'" label="Password" required>
-            <UInput v-model="form.password" type="password" autocomplete="current-password" required class="w-full" size="lg" />
+            <PasswordInput v-model="form.password" autocomplete="current-password" required class="w-full" size="lg" />
           </UFormField>
           <p v-if="error" class="text-sm text-error">
             {{ error }}
