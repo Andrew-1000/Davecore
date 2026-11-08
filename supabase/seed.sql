@@ -23,6 +23,6 @@ values ('upendo-apartment-block', 'DC-A805', 'Upendo', 'apartment', 2, 1, array[
 on conflict (slug) do nothing;
 
 insert into public.site_settings (key, value) values
-  ('contact', '{"phone":"0751 207 221","whatsapp":"","email":"","address":"Nairobi, Kenya","hours":"Monday–Friday 8:00–17:00 · Saturday 9:00–13:00"}'::jsonb),
+  ('contact', '{"phone":"0751 207 221","whatsapp":"254751207221","email":"","address":"Nairobi, Kenya","hours":"Monday–Friday 8:00–17:00 · Saturday 9:00–13:00"}'::jsonb),
   ('company', '{"intro":"We design homes, cost them properly and build them, with a Bill of Quantities behind every shilling."}'::jsonb)
 on conflict (key) do nothing;

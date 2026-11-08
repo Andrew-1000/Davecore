@@ -11,7 +11,7 @@ export const SITE = {
     /** e.g. '+254 7XX XXX XXX' (shown as text; also used for the call link) */
     phone: '0751 207 221',
     /** WhatsApp number in international format without +, e.g. '2547XXXXXXXX' */
-    whatsapp: '',
+    whatsapp: '254751207221',
     email: '',
     address: 'Nairobi, Kenya',
     hours: 'Monday–Friday 8:00–17:00 · Saturday 9:00–13:00'
